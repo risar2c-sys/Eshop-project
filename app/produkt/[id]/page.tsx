@@ -9,6 +9,8 @@ import StarRating from "@/components/product/StarRating";
 import ReviewsList from "@/components/product/ReviewsList";
 import RelatedProducts from "@/components/product/RelatedProducts";
 
+export const dynamic = "force-dynamic";
+
 export async function generateStaticParams() {
   const products = await getAllProducts();
   return products.map((p) => ({ id: p.id }));

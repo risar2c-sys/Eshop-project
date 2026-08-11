@@ -4,6 +4,8 @@ import { categories, getCategoryBySlug, getProductsByCategory } from "@/lib/data
 import Breadcrumbs from "@/components/category/Breadcrumbs";
 import CategoryBrowser from "@/components/category/CategoryBrowser";
 
+export const dynamic = "force-dynamic";
+
 export function generateStaticParams() {
   return categories.map((c) => ({ category: c.slug }));
 }
