@@ -37,26 +37,28 @@ export default function ProductCard({ product }: { product: Product }) {
         </button>
       </div>
 
-      <div className="p-4 space-y-2 flex flex-col flex-1">
-        <p className="label-tag">{product.origin} · {product.harvest}</p>
-        <Link href={`/produkt/${product.id}`}>
-          <h3 className="font-display text-lg text-forest hover:underline">{product.name}</h3>
-        </Link>
+      <div className="p-4 flex flex-col justify-between flex-1">
+        <div className="space-y-2">
+          <p className="label-tag">{product.origin} · {product.harvest}</p>
+          <Link href={`/produkt/${product.id}`}>
+            <h3 className="font-display text-lg text-forest hover:underline">{product.name}</h3>
+          </Link>
 
-        <AromaProfile notes={product.aroma} size={64} />
+          <AromaProfile notes={product.aroma} size={64} />
 
-        <div className="flex items-baseline gap-2 pt-1">
-          {hasVariants ? (
-            <span className="font-display text-lg text-bark">od {lowestPrice} Kč</span>
-          ) : (
-            <>
-              <span className="font-display text-lg text-bark">{product.price} Kč</span>
-              {onSale && <span className="text-sm text-bark/40 line-through">{product.originalPrice} Kč</span>}
-            </>
-          )}
+          <div className="flex items-baseline gap-2 pt-1">
+            {hasVariants ? (
+              <span className="font-display text-lg text-bark">od {lowestPrice} Kč</span>
+            ) : (
+              <>
+                <span className="font-display text-lg text-bark">{product.price} Kč</span>
+                {onSale && <span className="text-sm text-bark/40 line-through">{product.originalPrice} Kč</span>}
+              </>
+            )}
+          </div>
         </div>
 
-        <div className="mt-auto pt-1">
+        <div className="pt-3">
           {!hasVariants && (
             <button
               onClick={() => addItem(product)}
