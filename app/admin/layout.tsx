@@ -2,7 +2,11 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { requireAdminSession } from "@/lib/admin";
 
-const navItems = [{ href: "/admin", label: "Přehled" }, { href: "/admin/produkty", label: "Produkty" }];
+const navItems = [
+  { href: "/admin", label: "Přehled" },
+  { href: "/admin/produkty", label: "Produkty" },
+  { href: "/admin/vzhled", label: "Vzhled" },
+];
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const admin = await requireAdminSession();

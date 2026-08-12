@@ -1,9 +1,9 @@
 import Image from "next/image";
 
-export default function Hero() {
+export default function Hero({ imageUrl }: { imageUrl: string }) {
   return (
     <section className="relative h-[86vh] min-h-[560px] w-full overflow-hidden">
-      <Image src="/hero/hero-leaves.jpg" alt="Sušené čajové lístky a koření" fill priority className="object-cover" />
+      <Image src={imageUrl} alt="Sušené čajové lístky a koření" fill priority className="object-cover" />
       <div className="absolute inset-0 bg-gradient-to-t from-forest/80 via-forest/20 to-transparent" />
       <div className="relative h-full max-w-7xl mx-auto px-6 flex flex-col justify-end pb-20">
         <p className="label-tag text-gold">sklizeno s péčí · pražené v malých dávkách</p>

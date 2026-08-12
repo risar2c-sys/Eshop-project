@@ -53,6 +53,13 @@ model Review {
   productId String
 }
 
+model SiteSettings {
+  id                 String   @id @default("default")
+  heroImageUrl       String?
+  categoryImagesJson String?  @default("{}")
+  updatedAt          DateTime @updatedAt
+}
+
 model Coupon {
   id           String   @id @default(cuid())
   code         String   @unique
