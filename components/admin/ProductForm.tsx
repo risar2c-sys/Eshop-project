@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { X, Upload, Plus, Trash2 } from "lucide-react";
+import { getSubcategories } from "@/lib/subcategories";
 
 const categoryOptions = [
   { slug: "caje", label: "Čaje" },
@@ -17,6 +18,7 @@ type ProductFormValues = {
   id?: string;
   name: string;
   categorySlug: string;
+  subcategory: string;
   price: string;
   originalPrice: string;
   origin: string;
@@ -30,7 +32,7 @@ type ProductFormValues = {
 };
 
 const emptyValues: ProductFormValues = {
-  name: "", categorySlug: "caje", price: "", originalPrice: "", origin: "",
+  name: "", categorySlug: "caje", subcategory: "", price: "", originalPrice: "", origin: "",
   harvest: "", weight: "", description: "", inStock: true, stockCount: "0",
   images: [], variants: [],
 };
@@ -127,6 +129,15 @@ export default function ProductForm({ initialValues }: { initialValues?: Product
             {categoryOptions.map((c) => <option key={c.slug} value={c.slug}>{c.label}</option>)}
           </select>
         </label>
+        {getSubcategories(values.categorySlug).length > 0 && (
+          <label className="block">
+            <span className="text-sm text-bark/70 block mb-1">Podkategorie</span>
+            <select value={values.subcategory} onChange={(e) => update("subcategory", e.target.value)} className="input">
+              <option value="">— nevybráno —</option>
+              {getSubcategories(values.categorySlug).map((s) => <option key={s.slug} value={s.slug}>{s.label}</option>)}
+            </select>
+          </label>
+        )}
         <label className="block">
           <span className="text-sm text-bark/70 block mb-1">
             {values.variants.length > 0 ? "Základní hmotnost (info)" : "Hmotnost / gramáž"}

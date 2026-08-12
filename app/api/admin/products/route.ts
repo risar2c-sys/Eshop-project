@@ -25,6 +25,7 @@ export async function POST(request: Request) {
       name: body.name,
       category: categoryLabel[categorySlug] ?? categorySlug,
       categorySlug,
+      subcategory: body.subcategory || null,
       price: Number(body.price),
       originalPrice: body.originalPrice ? Number(body.originalPrice) : null,
       origin: body.origin,

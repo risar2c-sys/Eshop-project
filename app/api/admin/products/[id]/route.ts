@@ -22,6 +22,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     data: {
       name: body.name,
       categorySlug: body.categorySlug,
+      subcategory: body.subcategory || null,
       category: body.category,
       price: Number(body.price),
       originalPrice: body.originalPrice ? Number(body.originalPrice) : null,

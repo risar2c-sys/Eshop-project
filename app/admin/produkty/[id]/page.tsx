@@ -16,6 +16,7 @@ export default async function EditProductPage({ params }: { params: { id: string
           id: product.id,
           name: product.name,
           categorySlug: product.categorySlug,
+          subcategory: product.subcategory ?? "",
           price: String(product.price),
           originalPrice: product.originalPrice ? String(product.originalPrice) : "",
           origin: product.origin,

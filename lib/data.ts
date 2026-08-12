@@ -19,6 +19,7 @@ export type Product = {
   name: string;
   category: "čaj" | "bylina" | "káva" | "koření";
   categorySlug: CategorySlug;
+  subcategory?: string;
   price: number;
   originalPrice?: number;
   origin: string;
@@ -55,6 +56,7 @@ function mapDbProduct(p: any): Product {
     name: p.name,
     category: p.category,
     categorySlug: p.categorySlug,
+    subcategory: p.subcategory ?? undefined,
     price: p.price,
     originalPrice: p.originalPrice ?? undefined,
     origin: p.origin,
@@ -91,9 +93,12 @@ export async function getAllProducts(): Promise<Product[]> {
   return rows.map(mapDbProduct);
 }
 
-export async function getProductsByCategory(categorySlug: CategorySlug): Promise<Product[]> {
+export async function getProductsByCategory(
+  categorySlug: CategorySlug,
+  subcategory?: string
+): Promise<Product[]> {
   const rows = await prisma.product.findMany({
-    where: { categorySlug },
+    where: { categorySlug, ...(subcategory ? { subcategory } : {}) },
     include,
     orderBy: { createdAt: "desc" },
   });
