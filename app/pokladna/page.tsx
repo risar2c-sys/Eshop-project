@@ -17,7 +17,7 @@ const stepFields: Record<number, (keyof CheckoutFormData)[]> = {
 };
 
 export default function CheckoutPage() {
-  const { items } = useCart();
+  const { items, clearCart } = useCart();
   const [step, setStep] = useState(1);
   const [submitted, setSubmitted] = useState(false);
 
@@ -35,6 +35,7 @@ export default function CheckoutPage() {
   const onSubmit = (data: CheckoutFormData) => {
     console.log("Objednávka:", data, items);
     setSubmitted(true);
+    clearCart();
   };
 
   if (items.length === 0 && !submitted) {

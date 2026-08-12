@@ -17,6 +17,7 @@ type CartContextValue = {
   closeCart: () => void;
   addItem: (product: Product, quantity?: number, variantLabel?: string) => void;
   removeItem: (productId: string, variantLabel?: string) => void;
+  clearCart: () => void;
   updateQuantity: (productId: string, quantity: number, variantLabel?: string) => void;
   couponCode: string;
   applyCoupon: (code: string) => void;
@@ -76,6 +77,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setIsOpen(true);
   };
 
+  const clearCart = () => setItems([]);
+
   const removeItem = (productId: string, variantLabel?: string) => {
     setItems((prev) => prev.filter((i) => lineKey(i.product.id, i.variantLabel) !== lineKey(productId, variantLabel)));
   };
@@ -109,7 +112,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         items, isOpen,
         openCart: () => setIsOpen(true),
         closeCart: () => setIsOpen(false),
-        addItem, removeItem, updateQuantity,
+        addItem, removeItem, updateQuantity, clearCart,
         couponCode, applyCoupon,
         discount, subtotal, shipping, vat, total, itemCount,
       }}
