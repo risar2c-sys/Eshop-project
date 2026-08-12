@@ -69,10 +69,6 @@ export default async function ProductPage({ params }: { params: { id: string } }
 
           <dl className="mt-8 text-sm divide-y divide-forest/10 border-t border-forest/10">
             <div className="flex justify-between py-2.5">
-              <dt className="text-bark/60">Složení</dt>
-              <dd className="text-right max-w-[60%]">{product.composition.join(", ")}</dd>
-            </div>
-            <div className="flex justify-between py-2.5">
               <dt className="text-bark/60">Země původu</dt>
               <dd>{product.origin}</dd>
             </div>
