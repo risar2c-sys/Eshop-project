@@ -11,7 +11,7 @@ export default function Hero({ imageUrl }: { imageUrl: string }) {
           Chuť, kterou lze vystopovat až k jejímu původu.
         </h1>
         <p className="text-sand/80 max-w-md mt-5">
-          Čaje, byliny, káva a koření od pěstitelů, které jsme sami navštívili.
+          Ručně sbírané čaje z daleka.
         </p>
         <a href="#kategorie" className="btn-primary w-fit mt-8">Nakupovat</a>
       </div>
