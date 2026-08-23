@@ -11,22 +11,18 @@ export default function CategoryBrowser({ products }: { products: Product[] }) {
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<SortOption>("doporucene");
   const [onlyInStock, setOnlyInStock] = useState(false);
-  const [maxPrice, setMaxPrice] = useState<number>(Math.max(...products.map((p) => p.price), 500));
   const [page, setPage] = useState(1);
-
-  const priceCeiling = Math.max(...products.map((p) => p.price), 0);
 
   const filtered = useMemo(() => {
     let list = products.filter((p) => p.name.toLowerCase().includes(search.toLowerCase()));
     if (onlyInStock) list = list.filter((p) => p.inStock);
-    list = list.filter((p) => p.price <= maxPrice);
     switch (sort) {
       case "cena-asc": list = [...list].sort((a, b) => a.price - b.price); break;
       case "cena-desc": list = [...list].sort((a, b) => b.price - a.price); break;
       case "nazev": list = [...list].sort((a, b) => a.name.localeCompare(b.name, "cs")); break;
     }
     return list;
-  }, [products, search, sort, onlyInStock, maxPrice]);
+  }, [products, search, sort, onlyInStock]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
@@ -40,10 +36,6 @@ export default function CategoryBrowser({ products }: { products: Product[] }) {
         <div>
           <label htmlFor="search" className="label-tag block mb-2">Hledat</label>
           <input id="search" value={search} onChange={(e) => updateAndResetPage(setSearch)(e.target.value)} placeholder="Název produktu…" className="input" />
-        </div>
-        <div>
-          <label htmlFor="price" className="label-tag block mb-2">Max. cena: {maxPrice} Kč</label>
-          <input id="price" type="range" min={0} max={priceCeiling} step={10} value={maxPrice} onChange={(e) => updateAndResetPage(setMaxPrice)(Number(e.target.value))} className="w-full accent-forest" />
         </div>
         <label className="flex items-center gap-2 text-sm">
           <input type="checkbox" checked={onlyInStock} onChange={(e) => updateAndResetPage(setOnlyInStock)(e.target.checked)} className="accent-forest" />
