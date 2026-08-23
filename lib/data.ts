@@ -7,7 +7,6 @@ export type Review = { id: string; author: string; rating: number; date: string;
 export type Nutrition = { energyKcal: number; fat: number; carbs: number; protein: number };
 export type Preparation = { tempC: number; amount: string; timeMin: number };
 
-// Varianta velikosti balení (např. 50 g / 100 g / 1 kg), každá s vlastní cenou a skladem.
 export type ProductVariant = {
   label: string;
   price: number;
@@ -36,7 +35,7 @@ export type Product = {
   rating: number;
   aroma: AromaNote[];
   reviews: Review[];
-  variants: ProductVariant[]; // prázdné pole = produkt nemá výběr velikosti, používá se price/weight/stockCount
+  variants: ProductVariant[];
 };
 
 export const categories: { slug: CategorySlug; name: string; image: string }[] = [
@@ -95,10 +94,16 @@ export async function getAllProducts(): Promise<Product[]> {
 
 export async function getProductsByCategory(
   categorySlug: CategorySlug,
-  subcategory?: string
+  filter?: { subcategory?: string; subcategoryPrefix?: string }
 ): Promise<Product[]> {
+  const where: any = { categorySlug };
+  if (filter?.subcategory) {
+    where.subcategory = filter.subcategory;
+  } else if (filter?.subcategoryPrefix) {
+    where.subcategory = { startsWith: filter.subcategoryPrefix };
+  }
   const rows = await prisma.product.findMany({
-    where: { categorySlug, ...(subcategory ? { subcategory } : {}) },
+    where,
     include,
     orderBy: { createdAt: "desc" },
   });

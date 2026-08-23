@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { X, Upload, Plus, Trash2 } from "lucide-react";
-import { getSubcategories } from "@/lib/subcategories";
+import { getFlatSubcategoryOptions } from "@/lib/subcategories";
 
 const categoryOptions = [
   { slug: "caje", label: "Čaje" },
@@ -86,6 +86,8 @@ export default function ProductForm({ initialValues }: { initialValues?: Product
   };
   const removeVariant = (index: number) => update("variants", values.variants.filter((_, i) => i !== index));
 
+  const subcategoryOptions = getFlatSubcategoryOptions(values.categorySlug);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true); setError(null);
@@ -125,50 +127,55 @@ export default function ProductForm({ initialValues }: { initialValues?: Product
       <div className="grid grid-cols-2 gap-4">
         <label className="block">
           <span className="text-sm text-bark/70 block mb-1">Kategorie</span>
-          <select value={values.categorySlug} onChange={(e) => update("categorySlug", e.target.value)} className="input">
+          <select
+            value={values.categorySlug}
+            onChange={(e) => update("categorySlug", e.target.value)}
+            className="input"
+          >
             {categoryOptions.map((c) => <option key={c.slug} value={c.slug}>{c.label}</option>)}
           </select>
         </label>
-        {getSubcategories(values.categorySlug).length > 0 && (
+        {subcategoryOptions.length > 0 && (
           <label className="block">
             <span className="text-sm text-bark/70 block mb-1">Podkategorie</span>
             <select value={values.subcategory} onChange={(e) => update("subcategory", e.target.value)} className="input">
               <option value="">— nevybráno —</option>
-              {getSubcategories(values.categorySlug).map((s) => <option key={s.slug} value={s.slug}>{s.label}</option>)}
+              {subcategoryOptions.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
             </select>
           </label>
         )}
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
         <label className="block">
           <span className="text-sm text-bark/70 block mb-1">
             {values.variants.length > 0 ? "Základní hmotnost (info)" : "Hmotnost / gramáž"}
           </span>
           <input required placeholder="např. 100 g" value={values.weight} onChange={(e) => update("weight", e.target.value)} className="input" />
         </label>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
         <label className="block">
           <span className="text-sm text-bark/70 block mb-1">
             {values.variants.length > 0 ? "Základní cena (nepoužije se, je-li nastavena velikost)" : "Cena (Kč)"}
           </span>
           <input required type="number" min={0} value={values.price} onChange={(e) => update("price", e.target.value)} className="input" />
         </label>
-        <label className="block">
-          <span className="text-sm text-bark/70 block mb-1">Původní cena (nepovinné, pro slevu)</span>
-          <input type="number" min={0} value={values.originalPrice} onChange={(e) => update("originalPrice", e.target.value)} className="input" />
-        </label>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <label className="block">
+          <span className="text-sm text-bark/70 block mb-1">Původní cena (nepovinné, pro slevu)</span>
+          <input type="number" min={0} value={values.originalPrice} onChange={(e) => update("originalPrice", e.target.value)} className="input" />
+        </label>
+        <label className="block">
           <span className="text-sm text-bark/70 block mb-1">Země / oblast původu</span>
           <input required value={values.origin} onChange={(e) => update("origin", e.target.value)} className="input" />
         </label>
-        <label className="block">
-          <span className="text-sm text-bark/70 block mb-1">Sklizeň / pražení</span>
-          <input required placeholder="např. sklizeň 2026" value={values.harvest} onChange={(e) => update("harvest", e.target.value)} className="input" />
-        </label>
       </div>
+
+      <label className="block">
+        <span className="text-sm text-bark/70 block mb-1">Sklizeň / pražení</span>
+        <input required placeholder="např. sklizeň 2026" value={values.harvest} onChange={(e) => update("harvest", e.target.value)} className="input" />
+      </label>
 
       <label className="block">
         <span className="text-sm text-bark/70 block mb-1">Popis</span>
