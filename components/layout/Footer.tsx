@@ -1,6 +1,14 @@
 import Link from "next/link";
 import { MapPin, Phone, Mail } from "lucide-react";
 
+const linkHrefs: Record<string, string> = {
+  "Čaje": "/caje",
+  "Byliny": "/byliny",
+  "Káva": "/kava",
+  "Koření": "/koreni",
+  "Kontakt": "/kontakt",
+};
+
 const columns = [
   { title: "Obchod", links: ["Čaje", "Byliny", "Káva", "Koření"] },
   { title: "Zákaznický servis", links: ["Doprava a platba", "Reklamace", "Vrácení zboží", "FAQ", "Kontakt"] },
@@ -24,7 +32,11 @@ export default function Footer() {
             <p className="label-tag text-gold">{col.title}</p>
             <ul className="mt-4 space-y-2 text-sm text-sand/80">
               {col.links.map((link) => (
-                <li key={link}><Link href="#" className="hover:text-sand transition-colors">{link}</Link></li>
+                <li key={link}>
+                  <Link href={linkHrefs[link] ?? "#"} className="hover:text-sand transition-colors">
+                    {link}
+                  </Link>
+                </li>
               ))}
             </ul>
           </div>
