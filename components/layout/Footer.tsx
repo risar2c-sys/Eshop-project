@@ -14,9 +14,9 @@ export default function Footer() {
         <div>
           <p className="font-display text-2xl">Čaj Koření Káva</p>
           <div className="mt-3 text-sm text-sand/70 space-y-1.5">
-            <p className="flex items-center gap-2"><MapPin size={15} className="text-gold shrink-0" /> Haškova 5, Praha 7</p>
-            <p className="flex items-center gap-2"><Phone size={15} className="text-gold shrink-0" /> telefon doplníme</p>
-            <p className="flex items-center gap-2"><Mail size={15} className="text-gold shrink-0" /> e-mail doplníme</p>
+            <p className="flex items-center gap-2"><MapPin size={15} className="text-gold shrink-0" /> Haškova 5/132, 170 00, Praha 7</p>
+            <p className="flex items-center gap-2"><Phone size={15} className="text-gold shrink-0" /> +420 602 879 152</p>
+            <p className="flex items-center gap-2"><Mail size={15} className="text-gold shrink-0" /> igel-cz@volny.cz</p>
           </div>
         </div>
         {columns.map((col) => (
