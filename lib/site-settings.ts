@@ -19,12 +19,14 @@ export async function getSiteSettings() {
   return {
     heroImageUrl: row?.heroImageUrl || DEFAULT_HERO,
     categoryImages,
+    contactImageUrl: row?.contactImageUrl || undefined,
   };
 }
 
 export async function saveSiteSettings(data: {
   heroImageUrl?: string;
   categoryImages?: CategoryImages;
+  contactImageUrl?: string;
 }) {
   return prisma.siteSettings.upsert({
     where: { id: "default" },
@@ -32,12 +34,14 @@ export async function saveSiteSettings(data: {
       id: "default",
       heroImageUrl: data.heroImageUrl,
       categoryImagesJson: JSON.stringify(data.categoryImages ?? {}),
+      contactImageUrl: data.contactImageUrl,
     },
     update: {
       ...(data.heroImageUrl !== undefined ? { heroImageUrl: data.heroImageUrl } : {}),
       ...(data.categoryImages !== undefined
         ? { categoryImagesJson: JSON.stringify(data.categoryImages) }
         : {}),
+      ...(data.contactImageUrl !== undefined ? { contactImageUrl: data.contactImageUrl } : {}),
     },
   });
 }

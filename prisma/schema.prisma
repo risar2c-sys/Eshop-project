@@ -59,6 +59,7 @@ model SiteSettings {
   id                 String   @id @default("default")
   heroImageUrl       String?
   categoryImagesJson String?  @default("{}")
+  contactImageUrl    String?
   updatedAt          DateTime @updatedAt
 }
 

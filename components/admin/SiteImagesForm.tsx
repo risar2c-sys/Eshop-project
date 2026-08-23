@@ -23,12 +23,15 @@ function fileToBase64(file: File): Promise<string> {
 export default function SiteImagesForm({
   initialHero,
   initialCategoryImages,
+  initialContactImage,
 }: {
   initialHero: string;
   initialCategoryImages: CategoryImages;
+  initialContactImage?: string;
 }) {
   const [hero, setHero] = useState(initialHero);
   const [categoryImages, setCategoryImages] = useState<CategoryImages>(initialCategoryImages);
+  const [contactImage, setContactImage] = useState(initialContactImage ?? "");
   const [uploading, setUploading] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -72,13 +75,22 @@ export default function SiteImagesForm({
     setUploading(null);
   };
 
+  const handleContactUpload = async (files: FileList | null) => {
+    const file = files?.[0];
+    if (!file) return;
+    setUploading("contact");
+    const url = await uploadFile(file);
+    if (url) setContactImage(url);
+    setUploading(null);
+  };
+
   const handleSave = async () => {
     setSaving(true);
     setError(null);
     const res = await fetch("/api/admin/site-settings", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ heroImageUrl: hero, categoryImages }),
+      body: JSON.stringify({ heroImageUrl: hero, categoryImages, contactImageUrl: contactImage }),
     });
     setSaving(false);
     if (!res.ok) {
@@ -130,6 +142,28 @@ export default function SiteImagesForm({
             </div>
           ))}
         </div>
+      </div>
+
+      <div>
+        <p className="font-display text-lg text-forest mb-2">Fotka ke kontaktu</p>
+        <p className="text-xs text-bark/50 mb-3">Zobrazí se vedle kontaktních údajů a otevírací doby na stránce Kontakt.</p>
+        <div className="relative w-full aspect-[4/3] bg-sand-dark rounded-organic overflow-hidden mb-3 border border-forest/10">
+          {contactImage ? (
+            <img src={contactImage} alt="" className="w-full h-full object-cover" />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-bark/30 text-sm">Zatím nenahráno</div>
+          )}
+        </div>
+        <label className="flex items-center gap-2 text-sm border border-dashed border-forest/30 rounded-organic px-4 py-3 cursor-pointer hover:bg-white w-fit">
+          <Upload size={16} />
+          {uploading === "contact" ? "Nahrávám…" : "Nahrát fotku (JPG, PNG, WEBP)"}
+          <input
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            className="hidden"
+            onChange={(e) => handleContactUpload(e.target.files)}
+          />
+        </label>
       </div>
 
       {error && <p className="text-sm text-red-700">{error}</p>}
