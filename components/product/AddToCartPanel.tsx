@@ -18,6 +18,12 @@ export default function AddToCartPanel({ product }: { product: Product }) {
   const currentStock = activeVariant ? activeVariant.stockCount : product.stockCount;
   const currentInStock = activeVariant ? activeVariant.stockCount > 0 : product.inStock;
 
+  const handleSelectVariant = (label: string) => {
+    setSelectedVariant(label);
+    const stock = product.variants.find((v) => v.label === label)?.stockCount ?? 1;
+    setQuantity((q) => Math.min(q, Math.max(1, stock)));
+  };
+
   const handleAdd = () => {
     addItem(product, quantity, selectedVariant);
     setJustAdded(true);
@@ -33,7 +39,7 @@ export default function AddToCartPanel({ product }: { product: Product }) {
             {product.variants.map((v) => (
               <button
                 key={v.label}
-                onClick={() => setSelectedVariant(v.label)}
+                onClick={() => handleSelectVariant(v.label)}
                 disabled={v.stockCount === 0}
                 className={`px-4 py-2 rounded-organic border text-sm transition-colors
                   ${selectedVariant === v.label ? "border-forest bg-forest text-sand" : "border-forest/20 hover:border-forest/50"}
@@ -67,7 +73,12 @@ export default function AddToCartPanel({ product }: { product: Product }) {
             <Minus size={16} />
           </button>
           <span className="w-10 text-center">{quantity}</span>
-          <button onClick={() => setQuantity((q) => q + 1)} aria-label="Zvýšit množství" className="p-2.5 hover:bg-forest/5">
+          <button
+            onClick={() => setQuantity((q) => Math.min(currentStock, q + 1))}
+            disabled={quantity >= currentStock}
+            aria-label="Zvýšit množství"
+            className="p-2.5 hover:bg-forest/5 disabled:opacity-30 disabled:cursor-not-allowed"
+          >
             <Plus size={16} />
           </button>
         </div>
@@ -76,6 +87,9 @@ export default function AddToCartPanel({ product }: { product: Product }) {
           {justAdded ? "Přidáno ✓" : "Přidat do košíku"}
         </button>
       </div>
+      {currentInStock && quantity >= currentStock && (
+        <p className="text-xs text-bark/50">Maximální dostupné množství skladem.</p>
+      )}
     </div>
   );
 }

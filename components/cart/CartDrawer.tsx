@@ -7,6 +7,13 @@ import { X, Minus, Plus, Trash2 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import type { Product } from "@/lib/data";
 
+function getStockFor(product: Product, variantLabel?: string) {
+  if (variantLabel) {
+    return product.variants.find((v) => v.label === variantLabel)?.stockCount ?? 0;
+  }
+  return product.stockCount;
+}
+
 export default function CartDrawer() {
   const {
     items, isOpen, closeCart, updateQuantity, removeItem,
@@ -49,27 +56,39 @@ export default function CartDrawer() {
         ) : (
           <>
             <div className="flex-1 overflow-y-auto px-6 py-4 space-y-5">
-              {items.map(({ product, quantity, variantLabel, unitPrice }) => (
-                <div key={`${product.id}-${variantLabel ?? "default"}`} className="flex gap-3">
-                  <div className="relative w-20 h-24 bg-sand-dark rounded shrink-0 overflow-hidden">
-                    <Image src={product.image} alt={product.name} fill className="object-cover" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="label-tag truncate">{product.origin}</p>
-                    <h3 className="font-display text-base text-forest truncate">{product.name}</h3>
-                    {variantLabel && <p className="text-xs text-bark/50">Velikost: {variantLabel}</p>}
-                    <p className="text-sm text-bark/70 mt-1">{unitPrice} Kč</p>
-                    <div className="flex items-center justify-between mt-2">
-                      <div className="flex items-center border border-forest/20 rounded">
-                        <button onClick={() => updateQuantity(product.id, quantity - 1, variantLabel)} aria-label="Snížit množství" className="p-1.5 hover:bg-forest/5"><Minus size={14} /></button>
-                        <span className="w-6 text-center text-sm">{quantity}</span>
-                        <button onClick={() => updateQuantity(product.id, quantity + 1, variantLabel)} aria-label="Zvýšit množství" className="p-1.5 hover:bg-forest/5"><Plus size={14} /></button>
+              {items.map(({ product, quantity, variantLabel, unitPrice }) => {
+                const stock = getStockFor(product, variantLabel);
+                const atMax = quantity >= stock;
+                return (
+                  <div key={`${product.id}-${variantLabel ?? "default"}`} className="flex gap-3">
+                    <div className="relative w-20 h-24 bg-sand-dark rounded shrink-0 overflow-hidden">
+                      <Image src={product.image} alt={product.name} fill className="object-cover" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="label-tag truncate">{product.origin}</p>
+                      <h3 className="font-display text-base text-forest truncate">{product.name}</h3>
+                      {variantLabel && <p className="text-xs text-bark/50">Velikost: {variantLabel}</p>}
+                      <p className="text-sm text-bark/70 mt-1">{unitPrice} Kč</p>
+                      <div className="flex items-center justify-between mt-2">
+                        <div className="flex items-center border border-forest/20 rounded">
+                          <button onClick={() => updateQuantity(product.id, quantity - 1, variantLabel)} aria-label="Snížit množství" className="p-1.5 hover:bg-forest/5"><Minus size={14} /></button>
+                          <span className="w-6 text-center text-sm">{quantity}</span>
+                          <button
+                            onClick={() => updateQuantity(product.id, Math.min(stock, quantity + 1), variantLabel)}
+                            disabled={atMax}
+                            aria-label="Zvýšit množství"
+                            className="p-1.5 hover:bg-forest/5 disabled:opacity-30 disabled:cursor-not-allowed"
+                          >
+                            <Plus size={14} />
+                          </button>
+                        </div>
+                        <button onClick={() => removeItem(product.id, variantLabel)} aria-label={`Odstranit ${product.name} z košíku`} className="text-bark/40 hover:text-bark"><Trash2 size={16} /></button>
                       </div>
-                      <button onClick={() => removeItem(product.id, variantLabel)} aria-label={`Odstranit ${product.name} z košíku`} className="text-bark/40 hover:text-bark"><Trash2 size={16} /></button>
+                      {atMax && <p className="text-xs text-bark/40 mt-1">Max. dostupné množství skladem.</p>}
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
 
               {suggestions.length > 0 && (
                 <div className="pt-3 border-t border-forest/10">

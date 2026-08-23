@@ -6,8 +6,8 @@ import type { Product } from "@/lib/data";
 export type CartItem = {
   product: Product;
   quantity: number;
-  variantLabel?: string; // vybraná velikost balení, pokud produkt varianty má
-  unitPrice: number; // cena za kus v době vložení (buď product.price, nebo cena varianty)
+  variantLabel?: string;
+  unitPrice: number;
 };
 
 type CartContextValue = {
@@ -17,8 +17,8 @@ type CartContextValue = {
   closeCart: () => void;
   addItem: (product: Product, quantity?: number, variantLabel?: string) => void;
   removeItem: (productId: string, variantLabel?: string) => void;
-  clearCart: () => void;
   updateQuantity: (productId: string, quantity: number, variantLabel?: string) => void;
+  clearCart: () => void;
   couponCode: string;
   applyCoupon: (code: string) => void;
   discount: number;
@@ -33,12 +33,19 @@ const CartContext = createContext<CartContextValue | null>(null);
 
 const FREE_SHIPPING_THRESHOLD = 999;
 const SHIPPING_COST = 79;
-const VAT_RATE = 0.12; // snížená sazba DPH pro potraviny v ČR — ověřit u účetní
+const VAT_RATE = 0.12;
 
 const VALID_COUPONS: Record<string, number> = { CKK10: 0.1, VITEJTE: 0.05 };
 
 function lineKey(productId: string, variantLabel?: string) {
   return variantLabel ? `${productId}::${variantLabel}` : productId;
+}
+
+function stockFor(product: Product, variantLabel?: string) {
+  if (variantLabel) {
+    return product.variants.find((v) => v.label === variantLabel)?.stockCount ?? 0;
+  }
+  return product.stockCount;
 }
 
 export function CartProvider({ children }: { children: ReactNode }) {
@@ -60,24 +67,26 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const addItem: CartContextValue["addItem"] = (product, quantity = 1, variantLabel) => {
     const variant = variantLabel ? product.variants.find((v) => v.label === variantLabel) : undefined;
     const unitPrice = variant ? variant.price : product.price;
+    const stock = stockFor(product, variantLabel);
 
     setItems((prev) => {
       const existing = prev.find(
         (i) => lineKey(i.product.id, i.variantLabel) === lineKey(product.id, variantLabel)
       );
       if (existing) {
+        const nextQuantity = Math.min(stock, existing.quantity + quantity);
         return prev.map((i) =>
           lineKey(i.product.id, i.variantLabel) === lineKey(product.id, variantLabel)
-            ? { ...i, quantity: i.quantity + quantity }
+            ? { ...i, quantity: nextQuantity }
             : i
         );
       }
-      return [...prev, { product, quantity, variantLabel, unitPrice }];
+      const cappedQuantity = Math.min(stock, quantity);
+      if (cappedQuantity < 1) return prev;
+      return [...prev, { product, quantity: cappedQuantity, variantLabel, unitPrice }];
     });
     setIsOpen(true);
   };
-
-  const clearCart = () => setItems([]);
 
   const removeItem = (productId: string, variantLabel?: string) => {
     setItems((prev) => prev.filter((i) => lineKey(i.product.id, i.variantLabel) !== lineKey(productId, variantLabel)));
@@ -86,11 +95,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const updateQuantity = (productId: string, quantity: number, variantLabel?: string) => {
     if (quantity < 1) return removeItem(productId, variantLabel);
     setItems((prev) =>
-      prev.map((i) =>
-        lineKey(i.product.id, i.variantLabel) === lineKey(productId, variantLabel) ? { ...i, quantity } : i
-      )
+      prev.map((i) => {
+        if (lineKey(i.product.id, i.variantLabel) !== lineKey(productId, variantLabel)) return i;
+        const stock = stockFor(i.product, i.variantLabel);
+        return { ...i, quantity: Math.min(stock, quantity) };
+      })
     );
   };
+
+  const clearCart = () => setItems([]);
 
   const applyCoupon = (code: string) => setCouponCode(code.trim().toUpperCase());
 
