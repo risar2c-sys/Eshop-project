@@ -16,6 +16,10 @@ export const subcategoriesByCategory: Record<string, SubcategoryNode[]> = {
     { slug: "rooibos", label: "Rooibos" },
     { slug: "bylinne", label: "Bylinné" },
   ],
+  kava: [
+    { slug: "bez-prichute", label: "Bez příchutě" },
+    { slug: "s-prichuti", label: "S příchutí" },
+  ],
   koreni: [
     { slug: "jednodruhove", label: "Jednodruhové" },
     {
