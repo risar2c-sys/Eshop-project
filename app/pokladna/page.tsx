@@ -55,6 +55,8 @@ export default function CheckoutPage() {
           shippingMethod: shippingMethods.find((m) => m.id === data.shippingMethod)?.label ?? data.shippingMethod,
           paymentMethod: paymentMethods.find((m) => m.id === data.paymentMethod)?.label ?? data.paymentMethod,
           items: items.map((i) => ({
+            productId: i.product.id,
+            variantLabel: i.variantLabel,
             name: i.product.name + (i.variantLabel ? ` (${i.variantLabel})` : ""),
             price: i.unitPrice,
             quantity: i.quantity,

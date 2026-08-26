@@ -5,7 +5,36 @@ import { prisma } from "@/lib/prisma";
 const resend = new Resend(process.env.RESEND_API_KEY);
 const SHOP_EMAIL = "igel-cz@volny.cz";
 
-type OrderItemInput = { name: string; price: number; quantity: number };
+type OrderItemInput = {
+  name: string;
+  price: number;
+  quantity: number;
+  productId?: string;
+  variantLabel?: string;
+};
+
+async function decrementStock(item: OrderItemInput) {
+  if (!item.productId) return;
+  const product = await prisma.product.findUnique({ where: { slug: item.productId } });
+  if (!product) return;
+
+  if (item.variantLabel && product.variantsJson) {
+    const variants = JSON.parse(product.variantsJson) as { label: string; price: number; stockCount: number }[];
+    const updated = variants.map((v) =>
+      v.label === item.variantLabel ? { ...v, stockCount: Math.max(0, v.stockCount - item.quantity) } : v
+    );
+    await prisma.product.update({
+      where: { id: product.id },
+      data: { variantsJson: JSON.stringify(updated) },
+    });
+  } else {
+    const newStock = Math.max(0, product.stockCount - item.quantity);
+    await prisma.product.update({
+      where: { id: product.id },
+      data: { stockCount: newStock, inStock: newStock > 0 },
+    });
+  }
+}
 
 export async function POST(request: Request) {
   const body = await request.json();
@@ -40,6 +69,16 @@ export async function POST(request: Request) {
       },
     },
   });
+
+  // Trvale odečteme množství skladem — pro produkty s velikostmi u té
+  // konkrétní velikosti, jinak u základního skladu produktu.
+  for (const item of items) {
+    try {
+      await decrementStock(item);
+    } catch (err) {
+      console.error("Odečtení skladu selhalo pro položku:", item.name, err);
+    }
+  }
 
   const itemsHtml = items
     .map((i) => `<li>${i.quantity}× ${i.name} — ${i.price * i.quantity} Kč</li>`)
