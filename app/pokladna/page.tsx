@@ -17,9 +17,12 @@ const stepFields: Record<number, (keyof CheckoutFormData)[]> = {
 };
 
 export default function CheckoutPage() {
-  const { items, clearCart } = useCart();
+  const { items, clearCart, total } = useCart();
   const [step, setStep] = useState(1);
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [orderNumber, setOrderNumber] = useState<string | null>(null);
 
   const { register, handleSubmit, trigger, watch, formState: { errors } } = useForm<CheckoutFormData>({
     resolver: zodResolver(checkoutSchema),
@@ -32,10 +35,44 @@ export default function CheckoutPage() {
   const goNext = async () => { if (await trigger(stepFields[step])) setStep((s) => Math.min(4, s + 1)); };
   const goBack = () => setStep((s) => Math.max(1, s - 1));
 
-  const onSubmit = (data: CheckoutFormData) => {
-    console.log("Objednávka:", data, items);
-    setSubmitted(true);
-    clearCart();
+  const onSubmit = async (data: CheckoutFormData) => {
+    setSubmitting(true);
+    setSubmitError(null);
+
+    try {
+      const res = await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: data.email,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          phone: data.phone,
+          street: data.street,
+          city: data.city,
+          zip: data.zip,
+          note: data.note,
+          shippingMethod: shippingMethods.find((m) => m.id === data.shippingMethod)?.label ?? data.shippingMethod,
+          paymentMethod: paymentMethods.find((m) => m.id === data.paymentMethod)?.label ?? data.paymentMethod,
+          items: items.map((i) => ({
+            name: i.product.name + (i.variantLabel ? ` (${i.variantLabel})` : ""),
+            price: i.unitPrice,
+            quantity: i.quantity,
+          })),
+          total,
+        }),
+      });
+
+      if (!res.ok) throw new Error("Odeslání objednávky selhalo");
+      const result = await res.json();
+      setOrderNumber(result.orderNumber);
+      setSubmitted(true);
+      clearCart();
+    } catch (err) {
+      setSubmitError("Odeslání objednávky se nezdařilo, zkuste to prosím znovu.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (items.length === 0 && !submitted) {
@@ -52,6 +89,7 @@ export default function CheckoutPage() {
     return (
       <div className="max-w-2xl mx-auto px-6 py-24 text-center">
         <h1 className="section-heading mb-3">Děkujeme za objednávku!</h1>
+        {orderNumber && <p className="text-bark/70 mb-2">Číslo objednávky: <strong>{orderNumber}</strong></p>}
         <p className="text-bark/60 mb-6">Potvrzení jsme odeslali na váš e-mail.</p>
         <Link href="/" className="btn-primary">Zpět na hlavní stránku</Link>
       </div>
@@ -141,12 +179,19 @@ export default function CheckoutPage() {
                 {watch("note") && <SummaryRow label="Poznámka" value={watch("note")!} />}
               </div>
               <p className="text-xs text-bark/50 mt-4">Odesláním objednávky souhlasíte s obchodními podmínkami.</p>
+              {submitError && <p className="text-sm text-red-700 mt-3">{submitError}</p>}
             </fieldset>
           )}
 
           <div className="flex justify-between mt-8">
             {step > 1 ? <button type="button" onClick={goBack} className="btn-outline">Zpět</button> : <span />}
-            {step < 4 ? <button type="button" onClick={goNext} className="btn-primary">Pokračovat</button> : <button type="submit" className="btn-primary">Odeslat objednávku</button>}
+            {step < 4 ? (
+              <button type="button" onClick={goNext} className="btn-primary">Pokračovat</button>
+            ) : (
+              <button type="submit" disabled={submitting} className="btn-primary disabled:opacity-50">
+                {submitting ? "Odesílám…" : "Odeslat objednávku"}
+              </button>
+            )}
           </div>
         </form>
 
