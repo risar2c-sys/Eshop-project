@@ -62,7 +62,26 @@ export async function POST(request: Request) {
       `,
     });
   } catch (err) {
-    console.error("Odeslání e-mailu selhalo:", err);
+    console.error("Odeslání e-mailu obchodu selhalo:", err);
+  }
+
+  try {
+    await resend.emails.send({
+      from: "Čaj Koření Káva <onboarding@resend.dev>",
+      to: email,
+      subject: `Potvrzení objednávky ${orderNumber} — Čaj Koření Káva`,
+      html: `
+        <h2>Děkujeme za objednávku!</h2>
+        <p>Vaše objednávka <strong>${orderNumber}</strong> byla úspěšně přijata a zpracováváme ji.</p>
+        <p>${firstName} ${lastName}<br/>${street}, ${city}, ${zip}</p>
+        <ul>${itemsHtml}</ul>
+        <p><strong>Celkem: ${total} Kč</strong></p>
+        <p>Doprava: ${shippingMethod}<br/>Platba: ${paymentMethod}</p>
+        <p>O dalším průběhu vás budeme informovat.</p>
+      `,
+    });
+  } catch (err) {
+    console.error("Odeslání potvrzení zákazníkovi selhalo:", err);
   }
 
   return NextResponse.json({ orderNumber, id: order.id });
