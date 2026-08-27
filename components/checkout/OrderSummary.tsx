@@ -13,13 +13,13 @@ export default function OrderSummary({ selectedShippingId }: { selectedShippingI
     <div className="bg-white rounded-organic border border-forest/10 p-6 h-fit sticky top-24">
       <p className="label-tag mb-4">Vaše objednávka</p>
       <ul className="space-y-3 mb-4">
-        {items.map(({ product, quantity, variantLabel, unitPrice }) => (
-          <li key={`${product.id}-${variantLabel ?? "default"}`} className="flex gap-3 text-sm">
+        {items.map(({ product, quantity, variantLabel, note, unitPrice }) => (
+          <li key={`${product.id}-${variantLabel ?? "default"}-${note ?? ""}`} className="flex gap-3 text-sm">
             <div className="relative w-12 h-14 bg-sand-dark rounded shrink-0 overflow-hidden">
               <Image src={product.image} alt={product.name} fill className="object-cover" />
             </div>
             <div className="flex-1">
-              <p className="text-forest">{product.name}{variantLabel ? ` (${variantLabel})` : ""}</p>
+              <p className="text-forest">{product.name}{variantLabel ? ` (${variantLabel})` : ""}{note ? ` – ${note}` : ""}</p>
               <p className="text-bark/50">{quantity}× {unitPrice} Kč</p>
             </div>
             <p className="text-bark">{unitPrice * quantity} Kč</p>

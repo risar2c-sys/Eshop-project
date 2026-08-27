@@ -36,6 +36,7 @@ export type Product = {
   aroma: AromaNote[];
   reviews: Review[];
   variants: ProductVariant[];
+  grindOptions: string[];
 };
 
 export const categories: { slug: CategorySlug; name: string; image: string }[] = [
@@ -72,6 +73,7 @@ function mapDbProduct(p: any): Product {
     rating: p.rating,
     aroma: JSON.parse(p.aromaJson),
     variants: p.variantsJson ? JSON.parse(p.variantsJson) : [],
+    grindOptions: p.grindOptions ? JSON.parse(p.grindOptions) : [],
     reviews: p.reviews.map((r: any) => ({
       id: r.id,
       author: r.author,

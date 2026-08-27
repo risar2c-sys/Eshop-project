@@ -15,6 +15,7 @@ model Product {
   category       String
   categorySlug   String
   subcategory    String?
+  grindOptions   String?
   price          Int
   originalPrice  Int?
   origin         String

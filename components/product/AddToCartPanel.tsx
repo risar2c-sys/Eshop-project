@@ -8,8 +8,11 @@ import { useCart } from "@/context/CartContext";
 export default function AddToCartPanel({ product }: { product: Product }) {
   const { addItem } = useCart();
   const hasVariants = product.variants && product.variants.length > 0;
+  const grindOptions: string[] = (product as any).grindOptions ?? [];
+  const hasGrindOptions = grindOptions.length > 0;
 
   const [selectedVariant, setSelectedVariant] = useState(hasVariants ? product.variants[0].label : undefined);
+  const [selectedGrind, setSelectedGrind] = useState(hasGrindOptions ? grindOptions[0] : undefined);
   const [quantity, setQuantity] = useState(1);
   const [justAdded, setJustAdded] = useState(false);
 
@@ -25,7 +28,7 @@ export default function AddToCartPanel({ product }: { product: Product }) {
   };
 
   const handleAdd = () => {
-    addItem(product, quantity, selectedVariant);
+    addItem(product, quantity, selectedVariant, selectedGrind);
     setJustAdded(true);
     setTimeout(() => setJustAdded(false), 2000);
   };
@@ -58,6 +61,24 @@ export default function AddToCartPanel({ product }: { product: Product }) {
           <span className="text-bark/40 line-through">{product.originalPrice} Kč</span>
         )}
       </div>
+
+      {hasGrindOptions && (
+        <div>
+          <p className="label-tag mb-2">Úprava</p>
+          <div className="flex gap-2 flex-wrap">
+            {grindOptions.map((opt) => (
+              <button
+                key={opt}
+                onClick={() => setSelectedGrind(opt)}
+                className={`px-4 py-2 rounded-organic border text-sm transition-colors
+                  ${selectedGrind === opt ? "border-forest bg-forest text-sand" : "border-forest/20 hover:border-forest/50"}`}
+              >
+                {opt}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="flex items-center gap-2 text-sm">
         {currentInStock ? (

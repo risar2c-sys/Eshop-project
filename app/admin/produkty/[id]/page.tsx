@@ -3,10 +3,14 @@ import { prisma } from "@/lib/prisma";
 import ProductForm from "@/components/admin/ProductForm";
 
 export default async function EditProductPage({ params }: { params: { id: string } }) {
-  const product = await prisma.product.findUnique({ where: { id: params.id }, include: { images: { orderBy: { position: "asc" } } } });
+  const product = await prisma.product.findUnique({
+    where: { id: params.id },
+    include: { images: { orderBy: { position: "asc" } } },
+  });
   if (!product) notFound();
 
   const variants = product.variantsJson ? JSON.parse(product.variantsJson) : [];
+  const grindOptions = product.grindOptions ? JSON.parse(product.grindOptions) : [];
 
   return (
     <div>
@@ -27,6 +31,7 @@ export default async function EditProductPage({ params }: { params: { id: string
           stockCount: String(product.stockCount),
           images: product.images.map((i) => i.url),
           variants: variants.map((v: any) => ({ label: v.label, price: String(v.price), stockCount: String(v.stockCount) })),
+          grindOptions,
         }}
       />
     </div>

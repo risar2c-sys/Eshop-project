@@ -37,6 +37,7 @@ export async function POST(request: Request) {
       preparationJson: body.preparation ? JSON.stringify(body.preparation) : null,
       nutritionJson: body.nutrition ? JSON.stringify(body.nutrition) : null,
       variantsJson: body.variants && body.variants.length > 0 ? JSON.stringify(body.variants) : null,
+      grindOptions: body.grindOptions && body.grindOptions.length > 0 ? JSON.stringify(body.grindOptions) : null,
       inStock: Boolean(body.inStock),
       stockCount: Number(body.stockCount) || 0,
       rating: 0,

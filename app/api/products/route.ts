@@ -14,6 +14,7 @@ function mapDbProduct(p: any) {
     nutrition: p.nutritionJson ? JSON.parse(p.nutritionJson) : undefined,
     rating: p.rating, aroma: JSON.parse(p.aromaJson),
     variants: p.variantsJson ? JSON.parse(p.variantsJson) : [],
+    grindOptions: p.grindOptions ? JSON.parse(p.grindOptions) : [],
   };
 }
 

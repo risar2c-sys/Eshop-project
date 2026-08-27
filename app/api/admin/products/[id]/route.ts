@@ -22,8 +22,8 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     data: {
       name: body.name,
       categorySlug: body.categorySlug,
-      subcategory: body.subcategory || null,
       category: body.category,
+      subcategory: body.subcategory || null,
       price: Number(body.price),
       originalPrice: body.originalPrice ? Number(body.originalPrice) : null,
       origin: body.origin,
@@ -35,9 +35,16 @@ export async function PATCH(request: Request, { params }: { params: { id: string
       preparationJson: body.preparation ? JSON.stringify(body.preparation) : null,
       nutritionJson: body.nutrition ? JSON.stringify(body.nutrition) : null,
       variantsJson: body.variants && body.variants.length > 0 ? JSON.stringify(body.variants) : null,
+      grindOptions: body.grindOptions && body.grindOptions.length > 0 ? JSON.stringify(body.grindOptions) : null,
       inStock: Boolean(body.inStock),
       stockCount: Number(body.stockCount) || 0,
-      ...(body.images ? { images: { create: body.images.map((url: string, i: number) => ({ url, position: i })) } } : {}),
+      ...(body.images
+        ? {
+            images: {
+              create: body.images.map((url: string, i: number) => ({ url, position: i })),
+            },
+          }
+        : {}),
     },
   });
 

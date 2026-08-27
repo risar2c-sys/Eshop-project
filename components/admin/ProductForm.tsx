@@ -29,12 +29,13 @@ type ProductFormValues = {
   stockCount: string;
   images: string[];
   variants: VariantInput[];
+  grindOptions: string[];
 };
 
 const emptyValues: ProductFormValues = {
   name: "", categorySlug: "caje", subcategory: "", price: "", originalPrice: "", origin: "",
   harvest: "", weight: "", description: "", inStock: true, stockCount: "0",
-  images: [], variants: [],
+  images: [], variants: [], grindOptions: [],
 };
 
 function fileToBase64(file: File): Promise<string> {
@@ -50,6 +51,7 @@ export default function ProductForm({ initialValues }: { initialValues?: Product
   const router = useRouter();
   const isEditing = Boolean(initialValues?.id);
   const [values, setValues] = useState<ProductFormValues>(initialValues ?? emptyValues);
+  const [newGrindOption, setNewGrindOption] = useState("");
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -86,6 +88,14 @@ export default function ProductForm({ initialValues }: { initialValues?: Product
   };
   const removeVariant = (index: number) => update("variants", values.variants.filter((_, i) => i !== index));
 
+  const addGrindOption = () => {
+    const val = newGrindOption.trim();
+    if (!val || values.grindOptions.includes(val)) return;
+    update("grindOptions", [...values.grindOptions, val]);
+    setNewGrindOption("");
+  };
+  const removeGrindOption = (opt: string) => update("grindOptions", values.grindOptions.filter((o) => o !== opt));
+
   const subcategoryOptions = getFlatSubcategoryOptions(values.categorySlug);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -106,6 +116,7 @@ export default function ProductForm({ initialValues }: { initialValues?: Product
       composition: [],
       aroma: [],
       variants: cleanVariants,
+      grindOptions: values.grindOptions,
     };
 
     const url = isEditing ? `/api/admin/products/${values.id}` : "/api/admin/products";
@@ -239,6 +250,40 @@ export default function ProductForm({ initialValues }: { initialValues?: Product
         <button type="button" onClick={addVariant} className="flex items-center gap-2 text-sm text-forest mt-3 hover:underline">
           <Plus size={14} /> Přidat velikost
         </button>
+      </div>
+
+      <div className="border border-forest/10 rounded-organic bg-white p-4">
+        <div className="mb-3">
+          <p className="font-display text-forest">Doplňkové možnosti (např. Mletá / Zrnková)</p>
+          <p className="text-xs text-bark/50">
+            Nepovinné. Zobrazí se jako samostatný výběr pod cenou na stránce produktu — nezávisle na
+            velikosti balení, nemění cenu ani sklad.
+          </p>
+        </div>
+
+        <div className="flex flex-wrap gap-2 mb-3">
+          {values.grindOptions.map((opt) => (
+            <span key={opt} className="flex items-center gap-1.5 text-sm bg-sand px-3 py-1.5 rounded-full">
+              {opt}
+              <button type="button" onClick={() => removeGrindOption(opt)} aria-label={`Odstranit ${opt}`}>
+                <X size={12} />
+              </button>
+            </span>
+          ))}
+        </div>
+
+        <div className="flex gap-2">
+          <input
+            placeholder="např. Mletá"
+            value={newGrindOption}
+            onChange={(e) => setNewGrindOption(e.target.value)}
+            onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addGrindOption(); } }}
+            className="input flex-1"
+          />
+          <button type="button" onClick={addGrindOption} className="btn-outline text-sm px-4">
+            Přidat
+          </button>
+        </div>
       </div>
 
       <div>
