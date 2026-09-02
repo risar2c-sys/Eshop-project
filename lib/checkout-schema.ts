@@ -7,12 +7,9 @@ export const shippingMethods = [
 ] as const;
 
 export const paymentMethods = [
-  { id: "karta", label: "Platba kartou online" },
-  { id: "gopay", label: "GoPay" },
-  { id: "comgate", label: "Comgate" },
   { id: "apple-pay", label: "Apple Pay" },
   { id: "google-pay", label: "Google Pay" },
-  { id: "prevod", label: "Bankovní převod" },
+  { id: "karta-pri-vyzvednuti", label: "Platba kartou při vyzvednutí" },
   { id: "dobirka", label: "Dobírka (+ 40 Kč)" },
 ] as const;
 
