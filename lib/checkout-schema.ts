@@ -3,10 +3,7 @@ import { z } from "zod";
 export const shippingMethods = [
   { id: "zasilkovna", label: "Zásilkovna — výdejní místo", price: 59 },
   { id: "balikovna", label: "Balíkovna — výdejní místo", price: 55 },
-  { id: "ppl", label: "PPL — na adresu", price: 99 },
-  { id: "dpd", label: "DPD — na adresu", price: 99 },
-  { id: "ceska-posta", label: "Česká pošta — na adresu", price: 89 },
-  { id: "osobni-odber", label: "Osobní odběr — Praha", price: 0 },
+  { id: "osobni-odber", label: "Osobní odběr na prodejně — Praha 7", price: 0 },
 ] as const;
 
 export const paymentMethods = [
