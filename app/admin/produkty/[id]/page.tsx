@@ -28,9 +28,8 @@ export default async function EditProductPage({ params }: { params: { id: string
           weight: product.weight,
           description: product.description,
           inStock: product.inStock,
-          stockCount: String(product.stockCount),
           images: product.images.map((i) => i.url),
-          variants: variants.map((v: any) => ({ label: v.label, price: String(v.price), stockCount: String(v.stockCount) })),
+          variants: variants.map((v: any) => ({ label: v.label, price: String(v.price), inStock: v.stockCount > 0 })),
           grindOptions,
         }}
       />

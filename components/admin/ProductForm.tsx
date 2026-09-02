@@ -12,7 +12,9 @@ const categoryOptions = [
   { slug: "koreni", label: "Koření" },
 ];
 
-type VariantInput = { label: string; price: string; stockCount: string };
+const IN_STOCK_COUNT = 9999;
+
+type VariantInput = { label: string; price: string; inStock: boolean };
 
 type ProductFormValues = {
   id?: string;
@@ -26,7 +28,6 @@ type ProductFormValues = {
   weight: string;
   description: string;
   inStock: boolean;
-  stockCount: string;
   images: string[];
   variants: VariantInput[];
   grindOptions: string[];
@@ -34,7 +35,7 @@ type ProductFormValues = {
 
 const emptyValues: ProductFormValues = {
   name: "", categorySlug: "caje", subcategory: "", price: "", originalPrice: "", origin: "",
-  harvest: "", weight: "", description: "", inStock: true, stockCount: "0",
+  harvest: "", weight: "", description: "", inStock: true,
   images: [], variants: [], grindOptions: [],
 };
 
@@ -82,7 +83,7 @@ export default function ProductForm({ initialValues }: { initialValues?: Product
 
   const removeImage = (url: string) => update("images", values.images.filter((i) => i !== url));
 
-  const addVariant = () => update("variants", [...values.variants, { label: "", price: "", stockCount: "0" }]);
+  const addVariant = () => update("variants", [...values.variants, { label: "", price: "", inStock: true }]);
   const updateVariant = (index: number, patch: Partial<VariantInput>) => {
     update("variants", values.variants.map((v, i) => (i === index ? { ...v, ...patch } : v)));
   };
@@ -105,14 +106,14 @@ export default function ProductForm({ initialValues }: { initialValues?: Product
     const category = categoryOptions.find((c) => c.slug === values.categorySlug)?.label ?? "";
     const cleanVariants = values.variants
       .filter((v) => v.label.trim() !== "")
-      .map((v) => ({ label: v.label, price: Number(v.price) || 0, stockCount: Number(v.stockCount) || 0 }));
+      .map((v) => ({ label: v.label, price: Number(v.price) || 0, stockCount: v.inStock ? IN_STOCK_COUNT : 0 }));
 
     const payload = {
       ...values,
       category,
       price: Number(values.price),
       originalPrice: values.originalPrice ? Number(values.originalPrice) : null,
-      stockCount: Number(values.stockCount),
+      stockCount: values.inStock ? IN_STOCK_COUNT : 0,
       composition: [],
       aroma: [],
       variants: cleanVariants,
@@ -193,16 +194,19 @@ export default function ProductForm({ initialValues }: { initialValues?: Product
         <textarea required rows={4} value={values.description} onChange={(e) => update("description", e.target.value)} className="input" />
       </label>
 
-      <div className="grid grid-cols-2 gap-4 items-end">
-        <label className="flex items-center gap-2 text-sm">
-          <input type="checkbox" checked={values.inStock} onChange={(e) => update("inStock", e.target.checked)} className="accent-forest" />
-          Skladem (pokud nemá varianty velikosti)
-        </label>
+      {values.variants.length === 0 && (
         <label className="block">
-          <span className="text-sm text-bark/70 block mb-1">Počet kusů skladem</span>
-          <input type="number" min={0} value={values.stockCount} onChange={(e) => update("stockCount", e.target.value)} className="input" />
+          <span className="text-sm text-bark/70 block mb-1">Dostupnost</span>
+          <select
+            value={values.inStock ? "ano" : "ne"}
+            onChange={(e) => update("inStock", e.target.value === "ano")}
+            className="input"
+          >
+            <option value="ano">Skladem</option>
+            <option value="ne">Není skladem</option>
+          </select>
         </label>
-      </div>
+      )}
 
       <div className="border border-forest/10 rounded-organic bg-white p-4">
         <div className="flex items-center justify-between mb-3">
@@ -210,7 +214,7 @@ export default function ProductForm({ initialValues }: { initialValues?: Product
             <p className="font-display text-forest">Výběr velikosti balení</p>
             <p className="text-xs text-bark/50">
               Nepovinné. Pokud přidáte alespoň jednu velikost, zákazník si na stránce produktu vybere
-              mezi nimi a základní cena/hmotnost výše se nepoužije.
+              mezi nimi a pole "Dostupnost" výše se nepoužije.
             </p>
           </div>
         </div>
@@ -232,14 +236,14 @@ export default function ProductForm({ initialValues }: { initialValues?: Product
                 onChange={(e) => updateVariant(i, { price: e.target.value })}
                 className="input w-28"
               />
-              <input
-                type="number"
-                min={0}
-                placeholder="Sklad ks"
-                value={v.stockCount}
-                onChange={(e) => updateVariant(i, { stockCount: e.target.value })}
-                className="input w-24"
-              />
+              <select
+                value={v.inStock ? "ano" : "ne"}
+                onChange={(e) => updateVariant(i, { inStock: e.target.value === "ano" })}
+                className="input w-40"
+              >
+                <option value="ano">Skladem</option>
+                <option value="ne">Není skladem</option>
+              </select>
               <button type="button" onClick={() => removeVariant(i)} aria-label="Odstranit velikost" className="text-bark/40 hover:text-red-700">
                 <Trash2 size={16} />
               </button>
@@ -257,7 +261,7 @@ export default function ProductForm({ initialValues }: { initialValues?: Product
           <p className="font-display text-forest">Doplňkové možnosti (např. Mletá / Zrnková)</p>
           <p className="text-xs text-bark/50">
             Nepovinné. Zobrazí se jako samostatný výběr pod cenou na stránce produktu — nezávisle na
-            velikosti balení, nemění cenu ani sklad.
+            velikosti balení, nemění cenu ani dostupnost.
           </p>
         </div>
 

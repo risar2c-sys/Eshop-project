@@ -13,7 +13,7 @@ export default async function AdminProductsPage() {
       <div className="bg-white border border-forest/10 rounded-organic overflow-hidden">
         <table className="w-full text-sm">
           <thead className="bg-sand text-left text-bark/60">
-            <tr><th className="px-4 py-3">Foto</th><th className="px-4 py-3">Název</th><th className="px-4 py-3">Kategorie</th><th className="px-4 py-3">Cena</th><th className="px-4 py-3">Skladem</th><th className="px-4 py-3"></th></tr>
+            <tr><th className="px-4 py-3">Foto</th><th className="px-4 py-3">Název</th><th className="px-4 py-3">Kategorie</th><th className="px-4 py-3">Cena</th><th className="px-4 py-3">Dostupnost</th><th className="px-4 py-3"></th></tr>
           </thead>
           <tbody>
             {products.map((p) => (
@@ -22,7 +22,7 @@ export default async function AdminProductsPage() {
                 <td className="px-4 py-3 text-forest">{p.name}</td>
                 <td className="px-4 py-3 text-bark/60">{p.category}</td>
                 <td className="px-4 py-3">{p.price} Kč</td>
-                <td className="px-4 py-3">{p.inStock ? <span className="text-olive">{p.stockCount} ks</span> : <span className="text-bark/40">vyprodáno</span>}</td>
+                <td className="px-4 py-3">{p.inStock ? <span className="text-olive">Skladem</span> : <span className="text-bark/40">Vyprodáno</span>}</td>
                 <td className="px-4 py-3 text-right space-x-3 whitespace-nowrap">
                   <Link href={`/admin/produkty/${p.id}`} className="text-forest underline">Upravit</Link>
                   <DeleteProductButton productId={p.id} productName={p.name} />

@@ -82,7 +82,7 @@ export default function AddToCartPanel({ product }: { product: Product }) {
 
       <div className="flex items-center gap-2 text-sm">
         {currentInStock ? (
-          <><PackageCheck size={18} className="text-olive" /><span className="text-olive">Skladem ({currentStock} ks)</span></>
+          <><PackageCheck size={18} className="text-olive" /><span className="text-olive">Skladem</span></>
         ) : (
           <><PackageX size={18} className="text-bark/50" /><span className="text-bark/50">Vyprodáno</span></>
         )}
@@ -108,9 +108,6 @@ export default function AddToCartPanel({ product }: { product: Product }) {
           {justAdded ? "Přidáno ✓" : "Přidat do košíku"}
         </button>
       </div>
-      {currentInStock && quantity >= currentStock && (
-        <p className="text-xs text-bark/50">Maximální dostupné množství skladem.</p>
-      )}
     </div>
   );
 }
