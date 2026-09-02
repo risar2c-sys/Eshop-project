@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import type { Product } from "@/lib/data";
 import ProductCard from "@/components/ui/ProductCard";
 
-const PAGE_SIZE = 8;
+const PAGE_SIZE = 30;
 type SortOption = "doporucene" | "cena-asc" | "cena-desc" | "nazev";
 
 export default function CategoryBrowser({ products }: { products: Product[] }) {
