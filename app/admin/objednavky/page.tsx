@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import OrderStatusSelect from "@/components/admin/OrderStatusSelect";
 
@@ -24,7 +25,12 @@ export default async function AdminOrdersPage() {
                   {new Date(order.createdAt).toLocaleTimeString("cs-CZ", { hour: "2-digit", minute: "2-digit" })}
                 </p>
               </div>
-              <OrderStatusSelect orderId={order.id} currentStatus={order.status} />
+              <div className="flex items-center gap-3">
+                <Link href={`/admin/objednavky/${order.id}/stitek`} className="text-sm text-forest underline" target="_blank">
+                  Vytisknout štítek
+                </Link>
+                <OrderStatusSelect orderId={order.id} currentStatus={order.status} />
+              </div>
             </div>
 
             <div className="grid md:grid-cols-2 gap-4 mt-4 text-sm">
