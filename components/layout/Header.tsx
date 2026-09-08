@@ -1,7 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { Search, Heart, User, ShoppingBag } from "lucide-react";
+import { Search, Heart, User, ShoppingBag, X } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
 
@@ -16,24 +17,44 @@ const nav = [
 export default function Header() {
   const { itemCount, openCart } = useCart();
   const { ids } = useWishlist();
+  const [searchOpen, setSearchOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 bg-sand/95 backdrop-blur border-b border-forest/10">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        <Link href="/" className="font-display text-2xl text-forest">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
+        <Link href="/" className="font-display text-2xl text-forest shrink-0">
           Čaj Koření Káva
         </Link>
 
-        <nav className="hidden md:flex items-center gap-8 label-tag normal-case text-sm font-body text-bark">
-          {nav.map((item) => (
-            <Link key={item.href} href={item.href} className="hover:text-forest transition-colors">
-              {item.label}
-            </Link>
-          ))}
-        </nav>
+        {!searchOpen && (
+          <nav className="hidden md:flex items-center gap-8 label-tag normal-case text-sm font-body text-bark">
+            {nav.map((item) => (
+              <Link key={item.href} href={item.href} className="hover:text-forest transition-colors">
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+        )}
 
-        <div className="flex items-center gap-5 text-forest">
-          <button aria-label="Hledat"><Search size={20} /></button>
+        {searchOpen && (
+          <form action="/hledani" className="flex-1 flex items-center gap-2 max-w-md">
+            <input
+              type="text"
+              name="q"
+              autoFocus
+              placeholder="Hledat produkty…"
+              className="flex-1 px-3 py-2 text-sm border border-forest/20 rounded bg-white focus:outline-none focus:ring-2 focus:ring-gold"
+            />
+          </form>
+        )}
+
+        <div className="flex items-center gap-5 text-forest shrink-0">
+          <button
+            onClick={() => setSearchOpen((v) => !v)}
+            aria-label={searchOpen ? "Zavřít hledání" : "Hledat"}
+          >
+            {searchOpen ? <X size={20} /> : <Search size={20} />}
+          </button>
           <Link href="/ucet" aria-label="Oblíbené" className="relative">
             <Heart size={20} className={ids.length > 0 ? "fill-gold text-gold" : ""} />
           </Link>
