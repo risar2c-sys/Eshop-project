@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Search, Heart, User, ShoppingBag, X } from "lucide-react";
+import { useSession } from "next-auth/react";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
 
@@ -21,6 +22,7 @@ type SearchResult = { id: string; name: string; price: number; image: string };
 export default function Header() {
   const { itemCount, openCart } = useCart();
   const { ids } = useWishlist();
+  const { data: session } = useSession();
   const router = useRouter();
 
   const [searchOpen, setSearchOpen] = useState(false);
@@ -125,7 +127,7 @@ export default function Header() {
           <Link href="/ucet" aria-label="Oblíbené" className="relative">
             <Heart size={20} className={ids.length > 0 ? "fill-gold text-gold" : ""} />
           </Link>
-          <Link href="/ucet" aria-label="Účet"><User size={20} /></Link>
+          <Link href={session ? "/ucet" : "/prihlaseni"} aria-label="Účet"><User size={20} /></Link>
           <button onClick={openCart} aria-label="Košík" className="relative">
             <ShoppingBag size={20} />
             {itemCount > 0 && (
