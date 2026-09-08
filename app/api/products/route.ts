@@ -23,9 +23,18 @@ export async function GET(request: Request) {
   const idsParam = searchParams.get("ids");
   const excludeParam = searchParams.get("exclude");
   const limitParam = searchParams.get("limit");
+  const qParam = searchParams.get("q");
+
   const where: any = {};
   if (idsParam) where.slug = { in: idsParam.split(",") };
   if (excludeParam) where.slug = { ...(where.slug ?? {}), notIn: excludeParam.split(",") };
-  const rows = await prisma.product.findMany({ where, include, take: limitParam ? Number(limitParam) : undefined, orderBy: { createdAt: "desc" } });
+  if (qParam && qParam.trim()) where.name = { contains: qParam.trim(), mode: "insensitive" };
+
+  const rows = await prisma.product.findMany({
+    where,
+    include,
+    take: limitParam ? Number(limitParam) : undefined,
+    orderBy: { createdAt: "desc" },
+  });
   return NextResponse.json(rows.map(mapDbProduct));
 }
