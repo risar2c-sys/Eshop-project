@@ -112,7 +112,7 @@ export default async function CategoryPage({
         {category.name}
         {breadcrumbExtra.length > 0 ? ` — ${breadcrumbExtra.join(" · ")}` : ""}
       </h1>
-      <CategoryBrowser products={categoryProducts} />
+      <CategoryBrowser products={categoryProducts} pageSize={category.slug === "caje" ? 60 : 30} />
     </div>
   );
 }

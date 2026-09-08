@@ -4,10 +4,10 @@ import { useMemo, useState } from "react";
 import type { Product } from "@/lib/data";
 import ProductCard from "@/components/ui/ProductCard";
 
-const PAGE_SIZE = 30;
+
 type SortOption = "doporucene" | "cena-asc" | "cena-desc" | "nazev";
 
-export default function CategoryBrowser({ products }: { products: Product[] }) {
+export default function CategoryBrowser({ products, pageSize = 30 }: { products: Product[]; pageSize?: number }) {
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<SortOption>("doporucene");
   const [onlyInStock, setOnlyInStock] = useState(false);
@@ -24,9 +24,9 @@ export default function CategoryBrowser({ products }: { products: Product[] }) {
     return list;
   }, [products, search, sort, onlyInStock]);
 
-  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const currentPage = Math.min(page, totalPages);
-  const paginated = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+  const paginated = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   const updateAndResetPage = <T,>(setter: (v: T) => void) => (value: T) => { setter(value); setPage(1); };
 
