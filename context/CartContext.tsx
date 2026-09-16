@@ -35,6 +35,7 @@ const CartContext = createContext<CartContextValue | null>(null);
 const FREE_SHIPPING_THRESHOLD = 999;
 const SHIPPING_COST = 79;
 const VAT_RATE = 0.12;
+const CART_MAX_AGE_MS = 8 * 60 * 60 * 1000; // košík se sám vyprázdní po 8 hodinách nečinnosti
 
 const VALID_COUPONS: Record<string, number> = { CKK10: 0.1, VITEJTE: 0.05 };
 
@@ -57,12 +58,25 @@ export function CartProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const saved = localStorage.getItem("ckk-cart");
     if (saved) {
-      try { setItems(JSON.parse(saved)); } catch {}
+      try {
+        const parsed = JSON.parse(saved);
+        const savedAt = parsed.savedAt ?? 0;
+        const isExpired = Date.now() - savedAt > CART_MAX_AGE_MS;
+        if (!isExpired && Array.isArray(parsed.items)) {
+          setItems(parsed.items);
+        } else {
+          localStorage.removeItem("ckk-cart");
+        }
+      } catch {}
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("ckk-cart", JSON.stringify(items));
+    if (items.length === 0) {
+      localStorage.removeItem("ckk-cart");
+      return;
+    }
+    localStorage.setItem("ckk-cart", JSON.stringify({ items, savedAt: Date.now() }));
   }, [items]);
 
   const addItem: CartContextValue["addItem"] = (product, quantity = 1, variantLabel, note) => {

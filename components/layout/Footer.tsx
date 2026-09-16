@@ -7,6 +7,7 @@ const linkHrefs: Record<string, string> = {
   "Káva": "/kava",
   "Koření": "/koreni",
   "Kontakt": "/kontakt",
+  "Cookies": "/cookies",
 };
 
 const columns = [
