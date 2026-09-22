@@ -1,10 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
-export default function GatePage() {
-  const router = useRouter();
+function GateForm() {
   const searchParams = useSearchParams();
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -58,5 +57,13 @@ export default function GatePage() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function GatePage() {
+  return (
+    <Suspense fallback={null}>
+      <GateForm />
+    </Suspense>
   );
 }
