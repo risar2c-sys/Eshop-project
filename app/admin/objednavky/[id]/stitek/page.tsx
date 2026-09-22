@@ -22,23 +22,6 @@ function LabelContent({ order }: { order: any }) {
         </p>
         <p className="text-sm text-bark/60 mt-2">{order.phone}</p>
       </div>
-
-      <p className="text-xs text-bark/70 mb-1">
-        <strong>Objednávka:</strong> {order.orderNumber}
-      </p>
-      <p className="text-xs text-bark/70 mb-3">
-        <strong>Doprava:</strong> {order.shippingMethod}
-      </p>
-
-      <div className="text-xs text-bark/70">
-        {order.items.map((item: any) => (
-          <p key={item.id}>{item.quantity}× {item.name}</p>
-        ))}
-      </div>
-
-      {order.note && (
-        <p className="text-xs text-bark/50 mt-3 italic">Poznámka: {order.note}</p>
-      )}
     </div>
   );
 }
