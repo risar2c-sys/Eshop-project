@@ -61,7 +61,7 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-sand/95 backdrop-blur border-b border-forest/10">
+    <header className="print:hidden sticky top-0 z-50 bg-sand/95 backdrop-blur border-b border-forest/10">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
         <Link href="/" className="font-display text-2xl text-forest shrink-0">
           Čaj Koření Káva

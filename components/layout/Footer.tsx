@@ -18,7 +18,7 @@ const columns = [
 
 export default function Footer() {
   return (
-    <footer className="bg-forest text-sand mt-24">
+    <footer className="print:hidden bg-forest text-sand mt-24">
       <div className="max-w-7xl mx-auto px-6 py-16 grid gap-12 md:grid-cols-4">
         <div>
           <p className="font-display text-2xl">Čaj Koření Káva</p>

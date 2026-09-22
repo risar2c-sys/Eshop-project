@@ -14,7 +14,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   if (!admin) redirect("/prihlaseni");
   return (
     <div className="min-h-screen bg-sand-dark">
-      <div className="bg-forest text-sand">
+      <div className="print:hidden bg-forest text-sand">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/admin" className="font-display text-xl">Čaj Koření Káva — Administrace</Link>
           <Link href="/" className="text-sm text-sand/70 hover:text-sand">Zpět na web →</Link>
