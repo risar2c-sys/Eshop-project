@@ -29,6 +29,9 @@ export default async function AdminOrdersPage() {
                 <Link href={`/admin/objednavky/${order.id}/stitek`} className="text-sm text-forest underline" target="_blank">
                   Vytisknout štítek
                 </Link>
+                <Link href={`/admin/objednavky/${order.id}/obsah`} className="text-sm text-forest underline" target="_blank">
+                  Dodací list
+                </Link>
                 <OrderStatusSelect orderId={order.id} currentStatus={order.status} />
               </div>
             </div>
