@@ -1,11 +1,15 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import Image from "next/image";
 import PrintButton from "@/components/admin/PrintButton";
 
 function SlipContent({ order }: { order: any }) {
   return (
     <div className="bg-white p-10">
-      <p className="font-display text-2xl text-forest mb-1">Čaj Koření Káva</p>
+      <div className="flex items-center gap-2 mb-1">
+        <Image src="/jezecek.png" alt="" width={32} height={32} />
+        <p className="font-display text-2xl text-forest">Čaj Koření Káva</p>
+      </div>
       <p className="text-sm text-bark/50 mb-6">Dodací list</p>
 
       <div className="grid grid-cols-2 gap-6 mb-6 text-sm">
