@@ -65,7 +65,7 @@ export default function Header() {
     <header className="print:hidden sticky top-0 z-50 bg-sand/95 backdrop-blur border-b border-forest/10">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
         <Link href="/" className="flex items-center gap-2 font-display text-2xl text-forest shrink-0">
-          <Image src="/jezecek.png" alt="" width={36} height={36} className="shrink-0" />
+          <Image src="/jezecek-v2.png" alt="" width={36} height={36} className="shrink-0" />
           Čaj Koření Káva
         </Link>
 

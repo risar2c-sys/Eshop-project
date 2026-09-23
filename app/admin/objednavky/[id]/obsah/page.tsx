@@ -7,7 +7,7 @@ function SlipContent({ order }: { order: any }) {
   return (
     <div className="bg-white p-10">
       <div className="flex items-center gap-2 mb-1">
-        <Image src="/jezecek.png" alt="" width={32} height={32} />
+        <Image src="/jezecek-v2.png" alt="" width={32} height={32} />
         <p className="font-display text-2xl text-forest">Čaj Koření Káva</p>
       </div>
       <p className="text-sm text-bark/50 mb-6">Dodací list</p>
