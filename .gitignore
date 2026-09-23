@@ -6,3 +6,5 @@ node_modules/
 *.db-journal
 public/uploads/
 .DS_Store
+
+tsconfig.tsbuildinfo

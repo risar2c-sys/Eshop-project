@@ -18,3 +18,66 @@
 @media (prefers-reduced-motion: reduce) {
   * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
 }
+
+/* Uvítací animace ježka (components/layout/WelcomeSplash.tsx) */
+.ckk-splash {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+  background-color: #f7f1dc;
+  animation: ckk-splash-out 2s ease-in forwards;
+}
+
+.ckk-splash-run { animation: ckk-splash-run 2s linear forwards; }
+.ckk-splash-bob { animation: ckk-splash-bob 0.36s ease-in-out infinite; }
+
+.ckk-jezek { position: relative; display: block; }
+.ckk-jezek-telo { display: block; width: 100%; height: auto; }
+
+.ckk-noha {
+  position: absolute;
+  top: 91.9%;
+  height: auto;
+  transform-origin: 50% -35%;
+  animation-duration: 0.36s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.ckk-noha-a { left: 19.89%; width: 11.67%; animation-name: ckk-krok-vzad; }
+.ckk-noha-b { left: 31.22%; width: 12.33%; animation-name: ckk-krok-vpred; }
+.ckk-noha-c { left: 59.56%; width: 12%;    animation-name: ckk-krok-vpred; }
+.ckk-noha-d { left: 70.67%; width: 12%;    animation-name: ckk-krok-vzad; }
+
+@keyframes ckk-krok-vpred {
+  0%, 100% { transform: rotate(-14deg); }
+  50% { transform: rotate(14deg); }
+}
+
+@keyframes ckk-krok-vzad {
+  0%, 100% { transform: rotate(14deg); }
+  50% { transform: rotate(-14deg); }
+}
+
+@keyframes ckk-splash-out {
+  0%, 76% { opacity: 1; }
+  100% { opacity: 0; visibility: hidden; }
+}
+
+@keyframes ckk-splash-run {
+  0% { transform: translateX(-40vw); }
+  100% { transform: translateX(110vw); }
+}
+
+@keyframes ckk-splash-bob {
+  0%, 100% { transform: translateY(0) rotate(-0.8deg); }
+  50% { transform: translateY(-7px) rotate(1deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ckk-splash { display: none; }
+}

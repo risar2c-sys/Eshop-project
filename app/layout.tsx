@@ -7,6 +7,7 @@ import { CartProvider } from "@/context/CartContext";
 import { WishlistProvider } from "@/context/WishlistContext";
 import CartDrawer from "@/components/cart/CartDrawer";
 import CookieBanner from "@/components/layout/CookieBanner";
+import WelcomeSplash from "@/components/layout/WelcomeSplash";
 import AuthProvider from "@/components/providers/AuthProvider";
 
 const fraunces = Fraunces({ subsets: ["latin", "latin-ext"], variable: "--font-fraunces", weight: ["400", "500", "600"], style: ["normal", "italic"] });
@@ -26,6 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <AuthProvider>
           <WishlistProvider>
             <CartProvider>
+              <WelcomeSplash />
               <Header />
               <main>{children}</main>
               <Footer />
