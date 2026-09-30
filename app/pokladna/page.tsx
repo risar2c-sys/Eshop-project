@@ -8,6 +8,7 @@ import { checkoutSchema, type CheckoutFormData, shippingMethods, paymentMethods 
 import { useCart } from "@/context/CartContext";
 import CheckoutStepper from "@/components/checkout/CheckoutStepper";
 import OrderSummary from "@/components/checkout/OrderSummary";
+import ThankYouAnimation from "@/components/checkout/ThankYouAnimation";
 
 const stepFields: Record<number, (keyof CheckoutFormData)[]> = {
   1: ["email", "firstName", "lastName", "phone"],
@@ -89,12 +90,15 @@ export default function CheckoutPage() {
 
   if (submitted) {
     return (
-      <div className="max-w-2xl mx-auto px-6 py-24 text-center">
-        <h1 className="section-heading mb-3">Děkujeme za objednávku!</h1>
-        {orderNumber && <p className="text-bark/70 mb-2">Číslo objednávky: <strong>{orderNumber}</strong></p>}
-        <p className="text-bark/60 mb-6">Potvrzení jsme odeslali na váš e-mail.</p>
-        <Link href="/" className="btn-primary">Zpět na hlavní stránku</Link>
-      </div>
+      <>
+        <ThankYouAnimation />
+        <div className="max-w-2xl mx-auto px-6 py-24 text-center">
+          <h1 className="section-heading mb-3">Děkujeme za objednávku!</h1>
+          {orderNumber && <p className="text-bark/70 mb-2">Číslo objednávky: <strong>{orderNumber}</strong></p>}
+          <p className="text-bark/60 mb-6">Potvrzení jsme odeslali na váš e-mail.</p>
+          <Link href="/" className="btn-primary">Zpět na hlavní stránku</Link>
+        </div>
+      </>
     );
   }
 
