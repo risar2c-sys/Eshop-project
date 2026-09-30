@@ -13,8 +13,8 @@ type Variant = "portrait" | "square";
 
 // MP4 (H.264) umí všechny běžné prohlížeče, WebM je záloha pro ty, které H.264 nemají
 const SOURCES: Record<Variant, { mp4: string; webm: string; poster: string }> = {
-  portrait: { mp4: "/animace/dekujeme-na-vysku.mp4", webm: "/animace/dekujeme-na-vysku.webm", poster: "/animace/dekujeme-na-vysku.jpg" },
-  square: { mp4: "/animace/dekujeme-ctverec.mp4", webm: "/animace/dekujeme-ctverec.webm", poster: "/animace/dekujeme-ctverec.jpg" },
+  portrait: { mp4: "/animace/dekujeme-na-vysku-v2.mp4", webm: "/animace/dekujeme-na-vysku-v2.webm", poster: "/animace/dekujeme-na-vysku-v2.jpg" },
+  square: { mp4: "/animace/dekujeme-ctverec-v2.mp4", webm: "/animace/dekujeme-ctverec-v2.webm", poster: "/animace/dekujeme-ctverec-v2.jpg" },
 };
 
 const BACKGROUND = "#050805"; // barva okrajů videa, aby video splynulo s pozadím
