@@ -107,7 +107,15 @@ export default function CheckoutPage() {
       <h1 className="section-heading mb-8">Pokladna</h1>
       <CheckoutStepper current={step} />
       <div className="grid md:grid-cols-[1fr_360px] gap-10">
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          onKeyDown={(e) => {
+            // Enter nesmí formulář odeslat sám od sebe — odeslání jde jen přes kliknutí na tlačítko.
+            if (e.key === "Enter" && (e.target as HTMLElement).tagName !== "TEXTAREA") {
+              e.preventDefault();
+            }
+          }}
+        >
           {step === 1 && (
             <fieldset className="space-y-4">
               <legend className="font-display text-xl text-forest mb-2">Kontaktní údaje</legend>
