@@ -195,7 +195,7 @@ export default function CheckoutPage() {
               <button type="button" onClick={goNext} className="btn-primary">Pokračovat</button>
             ) : (
               <button type="submit" disabled={submitting} className="btn-primary disabled:opacity-50">
-                {submitting ? "Odesílám…" : "Odeslat objednávku"}
+                {submitting ? "Odesílám…" : "OBJEDNÁVKA ZAVAZUJÍCÍ K PLATBĚ"}
               </button>
             )}
           </div>

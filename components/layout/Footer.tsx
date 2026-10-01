@@ -44,7 +44,7 @@ export default function Footer() {
         ))}
       </div>
       <div className="border-t border-sand/10 py-6 text-center text-xs text-sand/50">
-        © {new Date().getFullYear()} Čaj Koření Káva. Všechna práva vyhrazena.
+        © {new Date().getFullYear()} Martina Růžičková. Všechna práva vyhrazena. Obsah webu, texty a fotografie jsou chráněny autorským právem.
       </div>
     </footer>
   );

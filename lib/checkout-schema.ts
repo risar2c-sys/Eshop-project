@@ -3,14 +3,14 @@ import { z } from "zod";
 export const shippingMethods = [
   { id: "zasilkovna", label: "Zásilkovna — výdejní místo", price: 59 },
   { id: "balikovna", label: "Balíkovna — výdejní místo", price: 55 },
+  { id: "ppl", label: "PPL — na adresu", price: 99 },
+  { id: "gls", label: "GLS — na adresu", price: 99 },
   { id: "osobni-odber", label: "Osobní odběr na prodejně — Praha 7", price: 0 },
 ] as const;
 
 export const paymentMethods = [
-  { id: "apple-pay", label: "Apple Pay" },
-  { id: "google-pay", label: "Google Pay" },
-  { id: "karta-pri-vyzvednuti", label: "Platba kartou při vyzvednutí" },
-  { id: "dobirka", label: "Dobírka (+ 40 Kč)" },
+  { id: "qr", label: "QR kód předem" },
+  { id: "hotove", label: "Hotově na prodejně" },
 ] as const;
 
 const shippingIds = shippingMethods.map((m) => m.id) as [string, ...string[]];
