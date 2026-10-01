@@ -8,6 +8,8 @@ const linkHrefs: Record<string, string> = {
   "Koření": "/koreni",
   "Kontakt": "/kontakt",
   "Cookies": "/cookies",
+  "Obchodní podmínky": "/obchodni-podminky",
+  "GDPR": "/gdpr",
 };
 
 const columns = [
@@ -16,10 +18,17 @@ const columns = [
   { title: "Informace", links: ["O nás", "Blog", "Obchodní podmínky", "GDPR", "Cookies"] },
 ];
 
+const openingHours = [
+  { day: "Po – Pá", hours: "9:30 – 18:00" },
+  { day: "Sobota", hours: "zavřeno" },
+  { day: "Neděle", hours: "zavřeno" },
+  { day: "Svátky", hours: "zavřeno" },
+];
+
 export default function Footer() {
   return (
     <footer className="print:hidden bg-forest text-sand mt-24">
-      <div className="max-w-7xl mx-auto px-6 py-16 grid gap-12 md:grid-cols-4">
+      <div className="max-w-7xl mx-auto px-6 py-16 grid gap-12 md:grid-cols-5">
         <div>
           <p className="font-display text-2xl">Čaj Koření Káva</p>
           <div className="mt-3 text-sm text-sand/70 space-y-1.5">
@@ -42,6 +51,18 @@ export default function Footer() {
             </ul>
           </div>
         ))}
+        <div>
+          <p className="label-tag text-gold">Otevírací doba</p>
+          <p className="text-xs text-sand/50 mt-2 mb-2">Kamenná prodejna (Čaje, Byliny)</p>
+          <dl className="text-sm text-sand/80 space-y-1">
+            {openingHours.map((row) => (
+              <div key={row.day} className="flex justify-between gap-4">
+                <dt>{row.day}</dt>
+                <dd className={row.hours === "zavřeno" ? "text-sand/40" : ""}>{row.hours}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
       </div>
       <div className="border-t border-sand/10 py-6 text-center text-xs text-sand/50">
         © {new Date().getFullYear()} Martina Růžičková. Všechna práva vyhrazena. Obsah webu, texty a fotografie jsou chráněny autorským právem.
