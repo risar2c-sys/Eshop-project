@@ -1,38 +1,9 @@
-export default function CookiesPage() {
+export default function Page() {
+  const text = "Z\u00c1SADY POU\u017d\u00cdV\u00c1N\u00cd SOUBOR\u016e COOKIE\n\nTento web provozuje podnikaj\u00edc\u00ed fyzick\u00e1 osoba Martina R\u016f\u017ei\u010dkov\u00e1, se\ns\u00eddlem Ovocn\u00e1 443/8, Praha 6, 161 00, I\u010cO: 21754659 (d\u00e1le jen \u201emy\u201c). V\nsouladu s pr\u00e1vn\u00edmi p\u0159edpisy v\u00e1s t\u00edmto informujeme o tom, jak na na\u0161em\ne-shopu www.cajkorenikava.cz vyu\u017e\u00edv\u00e1me soubory cookie.\n\n1. Co jsou to soubory cookie?\n\nSoubory cookie jsou mal\u00e9 textov\u00e9 soubory, kter\u00e9 internetov\u00e9 str\u00e1nky\nukl\u00e1daj\u00ed do va\u0161eho po\u010d\u00edta\u010de, mobilu nebo jin\u00e9ho za\u0159\u00edzen\u00ed v okam\u017eiku, kdy\nje za\u010dnete vyu\u017e\u00edvat. Str\u00e1nky si tak na ur\u010ditou dobu zapamatuj\u00ed va\u0161e\npreference a \u00fakony (nap\u0159. obsah n\u00e1kupn\u00edho ko\u0161\u00edku, jazyk nebo\np\u0159ihla\u0161ovac\u00ed \u00fadaje), tak\u017ee je nemus\u00edte zad\u00e1vat znovu.\n\n2. Jak\u00e9 druhy cookies pou\u017e\u00edv\u00e1me?\n\nNa na\u0161em e-shopu rozd\u011blujeme cookies podle jejich \u00fa\u010delu:\n\n-   Nezbytn\u00e9 (Technick\u00e9) cookies: Jsou nutn\u00e9 pro spr\u00e1vn\u00e9 fungov\u00e1n\u00ed webu\n    a n\u00e1kupn\u00edho procesu (nap\u0159. aby zbo\u017e\u00ed z\u016fstalo v ko\u0161\u00edku, i kdy\u017e\n    p\u0159ejdete na jinou str\u00e1nku). Bez t\u011bchto cookies by e-shop nemohl\n    fungovat. K jejich pou\u017e\u00edv\u00e1n\u00ed nepot\u0159ebujeme v\u00e1\u0161 souhlas.\n-   Analytick\u00e9 a v\u00fdkonnostn\u00ed cookies: Pom\u00e1haj\u00ed n\u00e1m pochopit, jak\n    n\u00e1v\u0161t\u011bvn\u00edci e-shop pou\u017e\u00edvaj\u00ed (kter\u00e9 str\u00e1nky jsou nej\u010dast\u011bji\n    nav\u0161t\u011bvovan\u00e9, jak dlouho na nich lid\u00e9 z\u016fst\u00e1vaj\u00ed). Data jsou anonymn\u00ed\n    a slou\u017e\u00ed v\u00fdhradn\u011b ke zlep\u0161ov\u00e1n\u00ed webu.\n-   Marketingov\u00e9 a reklamn\u00ed cookies: Umo\u017e\u0148uj\u00ed n\u00e1m zobrazovat v\u00e1m reklamu\n    na produkty (nap\u0159. na \u010daj, k\u00e1vu, ko\u0159en\u00ed), kter\u00e9 by v\u00e1s mohly\n    zaj\u00edmat, a to i na jin\u00fdch str\u00e1nk\u00e1ch nebo soci\u00e1ln\u00edch s\u00edt\u00edch.\n\n3. Souhlas a odm\u00edtnut\u00ed cookies\n\nP\u0159i va\u0161\u00ed prvn\u00ed n\u00e1v\u0161t\u011bv\u011b na\u0161eho e-shopu se zobraz\u00ed cookie li\u0161ta, kde\nm\u016f\u017eete vyj\u00e1d\u0159it sv\u016fj souhlas s ulo\u017een\u00edm analytick\u00fdch a marketingov\u00fdch\ncookies.\n\n-   Sv\u016fj souhlas m\u016f\u017eete kdykoliv zm\u011bnit nebo odvolat prost\u0159ednictv\u00edm\n    odkazu v nastaven\u00ed cookies v pati\u010dce na\u0161eho webu.\n-   V\u011bt\u0161ina internetov\u00fdch prohl\u00ed\u017ee\u010d\u016f nav\u00edc umo\u017e\u0148uje spr\u00e1vu a maz\u00e1n\u00ed\n    cookies p\u0159\u00edmo v nastaven\u00ed samotn\u00e9ho prohl\u00ed\u017ee\u010de (Chrome, Safari,\n    Firefox, Edge apod.). Pokud v\u0161ak nezbytn\u00e9 cookies zcela zak\u00e1\u017eete,\n    e-shop nemus\u00ed fungovat spr\u00e1vn\u011b.\n\n4. Kontaktn\u00ed \u00fadaje\n\nPokud m\u00e1te k pou\u017e\u00edv\u00e1n\u00ed cookies jak\u00e9koliv dotazy, m\u016f\u017eete n\u00e1s kontaktovat:\n\n-   Provozovna: Prodejna \u010daje, byliny, Ha\u0161kova 132/5, Praha 7, 170 00\n-   E-mail: igel-cz@volny.cz\n\nV Praze dne 30. z\u00e1\u0159\u00ed 2026";
   return (
     <div className="max-w-2xl mx-auto px-6 py-16">
-      <h1 className="section-heading mb-6">Cookies</h1>
-
-      <div className="space-y-6 text-bark/80 leading-relaxed">
-        <p>
-          Soubory cookie jsou malé textové soubory, které webová stránka ukládá ve vašem prohlížeči.
-          Používáme je pouze v rozsahu nezbytném pro fungování e-shopu.
-        </p>
-
-        <div>
-          <h2 className="font-display text-xl text-forest mb-2">Jaké cookies používáme</h2>
-          <ul className="list-disc pl-5 space-y-2">
-            <li><strong>Nezbytné cookies</strong> — udržují vás přihlášené a pamatují si obsah vašeho košíku mezi návštěvami. Bez nich by e-shop nefungoval.</li>
-            <li><strong>Platební brána</strong> — při platbě kartou online mohou platební brány (např. GoPay, Comgate) použít vlastní cookies nezbytné k bezpečnému zpracování platby.</li>
-          </ul>
-        </div>
-
-        <div>
-          <h2 className="font-display text-xl text-forest mb-2">Co nepoužíváme</h2>
-          <p>
-            Nepoužíváme žádné marketingové ani reklamní cookies (např. Google Analytics, Facebook Pixel).
-            Pokud se to v budoucnu změní, tuto stránku aktualizujeme.
-          </p>
-        </div>
-
-        <div>
-          <h2 className="font-display text-xl text-forest mb-2">Jak cookies spravovat</h2>
-          <p>
-            Ukládání cookies můžete kdykoliv omezit nebo zakázat v nastavení svého prohlížeče. Upozorňujeme,
-            že bez nezbytných cookies nemusí e-shop fungovat správně (např. přihlášení nebo košík).
-          </p>
-        </div>
-      </div>
+      <h1 className="section-heading mb-8">Zásady používání souborů cookie</h1>
+      <div className="text-bark/80 leading-relaxed whitespace-pre-line text-sm">{text}</div>
     </div>
   );
 }
