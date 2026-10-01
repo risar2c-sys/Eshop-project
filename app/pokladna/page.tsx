@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -20,6 +20,7 @@ const stepFields: Record<number, (keyof CheckoutFormData)[]> = {
 export default function CheckoutPage() {
   const { items, clearCart, total } = useCart();
   const [step, setStep] = useState(1);
+  const [canSubmit, setCanSubmit] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -33,7 +34,21 @@ export default function CheckoutPage() {
   const billingSameAsDelivery = watch("billingSameAsDelivery");
   const selectedShipping = watch("shippingMethod");
 
-  const goNext = async () => { if (await trigger(stepFields[step])) setStep((s) => Math.min(4, s + 1)); };
+  const goNext = async () => {
+    if (await trigger(stepFields[step])) {
+      setCanSubmit(false);
+      setStep((s) => Math.min(4, s + 1));
+    }
+  };
+
+  // Krátká ochranná pauza po příchodu na rekapitulaci, ať rychlý dvojklik
+  // (např. z předchozího "Pokračovat") nemůže omylem rovnou odeslat objednávku.
+  useEffect(() => {
+    if (step !== 4) return;
+    setCanSubmit(false);
+    const t = window.setTimeout(() => setCanSubmit(true), 500);
+    return () => window.clearTimeout(t);
+  }, [step]);
   const goBack = () => setStep((s) => Math.max(1, s - 1));
 
   const onSubmit = async (data: CheckoutFormData) => {
@@ -202,7 +217,7 @@ export default function CheckoutPage() {
             {step < 4 ? (
               <button type="button" onClick={goNext} className="btn-primary">Pokračovat</button>
             ) : (
-              <button type="submit" disabled={submitting} className="btn-primary disabled:opacity-50">
+              <button type="submit" disabled={submitting || !canSubmit} className="btn-primary disabled:opacity-50">
                 {submitting ? "Odesílám…" : "OBJEDNÁVKA ZAVAZUJÍCÍ K PLATBĚ"}
               </button>
             )}
