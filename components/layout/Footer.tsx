@@ -10,6 +10,8 @@ const linkHrefs: Record<string, string> = {
   "Cookies": "/cookies",
   "Obchodní podmínky": "/obchodni-podminky",
   "GDPR": "/gdpr",
+  "Reklamace": "/formulare/reklamace",
+  "Vrácení zboží": "/formulare/odstoupeni",
 };
 
 const columns = [
